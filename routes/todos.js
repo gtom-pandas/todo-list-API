@@ -5,7 +5,7 @@ const authenticateToken = require('../middleware/auth');
 
 router.post('/todos', authenticateToken, (req, res) => {
   const { title, description } = req.body;
-  const userId = req.user.id; // Ajouté par le middleware
+  const userId = req.user.id; 
 
   if (!title || !description) {
     return res.status(400).json({ message: 'Champs manquants' });
@@ -25,10 +25,10 @@ router.get('/todos', authenticateToken, (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const offset = (page - 1) * limit;
-  const sortBy = req.query.sortBy || 'id';      // Par défaut trié sur l'id
-  const order = req.query.order === 'desc' ? 'DESC' : 'ASC'; // asc ou desc (par défaut asc)
+  const sortBy = req.query.sortBy || 'id';     
+  const order = req.query.order === 'desc' ? 'DESC' : 'ASC'; // par défaut ascendant
 
-  // Filtrage simple sur titre (optionnel)
+// filtrage optionnel
   const filter = req.query.search || '';
   const filterSql = filter ? `AND title LIKE ?` : '';
   
@@ -88,7 +88,7 @@ router.delete('/todos/:id', authenticateToken, (req, res) => {
 
     db.run('DELETE FROM todos WHERE id = ?', [todoId], function (err) {
       if (err) return res.status(500).json({ message: 'Erreur BDD' });
-      res.status(204).send(); // 204 = succès, aucune donnée renvoyée
+      res.status(204).send(); 
     });
   });
 });
@@ -97,7 +97,7 @@ router.put('/todos/:id', authenticateToken, (req, res) => {
   const todoId = req.params.id;
   const { title, description } = req.body;
 
-  // On vérifie que le todo appartient bien à l'utilisateur
+  
   db.get('SELECT * FROM todos WHERE id = ? AND user_id = ?', [todoId, userId], (err, todo) => {
     if (err) return res.status(500).json({ message: 'Erreur BDD' });
     if (!todo) return res.status(403).json({ message: 'Forbidden' });
