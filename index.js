@@ -1,14 +1,14 @@
 const express = require('express');
 const app = express();
 const PORT = 3000;
-app.use(express.json()); // ← Doit être AVANT toutes les routes
+app.use(express.json()); 
 const authRouter = require('./routes/auth');
 app.use('/api', authRouter);
 const todosRouter = require('./routes/todos');
 app.use('/api', todosRouter);
 
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.send('Hello World! test');
 });
 
 const db = require('./db');
